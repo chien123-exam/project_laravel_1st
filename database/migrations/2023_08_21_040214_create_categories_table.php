@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('parent');
             $table->integer('created_by');
             $table->text('content');
-            $table->string('meta_tile', 255);
+            // $table->string('meta_title', 255);
             $table->string('meta_desc', 255);
             $table->string('meta_keyword', 255);
             $table->timestamps();

@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('file_path');
             $table->string('attachable_type')->nullable();
-            $table->string('file_name')->collation('default');
+            $table->string('file_name');
             $table->unsignedBigInteger('attachable_id');
-            $table->string('extension')->collation('default');
-            $table->string('mime_type')->collation('default');
-            $table->unsignedInteger('int')->default(0);
+            $table->string('extension');
+            $table->string('mime_type');
+            $table->unsignedInteger('size');
             $table->timestamps();
         });
     }
