@@ -158,6 +158,11 @@
                         <li class="active">
                             <a href="index.html"><i class="fe fe-home"></i> <span>Dashboard</span></a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('user.index') }}"><i class="fe fe-layout"></i> <span>User Management</span></a>
+                        </li>
+
                         <li>
                             <a href="category.html"><i class="fe fe-layout"></i> <span>Quản lý danh mục</span></a>
                         </li>

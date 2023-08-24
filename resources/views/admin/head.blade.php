@@ -13,3 +13,5 @@
     <link rel="stylesheet" href="{{ asset('/template/plugins/morris/morris.css') }}">
 
     <link rel="stylesheet" href="{{ asset('/template/css/style.css') }}">
+
+    

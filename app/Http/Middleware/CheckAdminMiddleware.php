@@ -16,9 +16,9 @@ class CheckAdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (auth()->check() && auth()->user()->type == 1) {
-            return redirect('/');
+            return $next($request);
         }
 
-        return $next($request);
+        return redirect()->route('dashboard');
     }
 }
