@@ -206,6 +206,13 @@
                             <a href="{{ route('user.create') }}">Create New</a>
                         </div>
 
+                        <div class="form-search">
+                    <form action="{{ route('user.index')}}" method="get" class="form-control" style="display: flex; align-items: center;">
+                        <input type="text" placeholder="Your keyword" name="keyword" value="{{ request()->get('keyword')}}" style="padding: 8px; border: none; border-radius: 4px;">
+                        <button class="" style="padding: 8px 16px; background-color: #3490dc; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Search</button>
+                    </form>
+                </div>
+
                         <div class="card">
                             <table class="table">
                                 <thead>
@@ -222,7 +229,7 @@
                                 </thead>
 
                                 <tbody>
-                                    @foreach ($users as $user)
+                                    @foreach ($usersPaginate->items() as $user)
                                     <tr>
                                     <th scope="row">{{ $user->id }}</th>
                                     <td>{{ $user->user_type }}</td>
@@ -232,17 +239,30 @@
                                     <td>{{ $user->address }}</td>
                                     <td>{{ $user->gender_label }}</td>
                                     <td>
-                                        <a href="{{ route('user.edit', ['user' => $user->id]) }}">Edit</a> |
-                                        <a href="{{ route('user.destroy', ['user' => $user->id]) }}">Delete</a>
+                                        <a href="{{ route('user.edit', ['user' => $user->id]) }}" style="background: none; color:red; border: none; cursor: pointer;" >Edit</a> |
+                                        <form method="POST" action="{{ route('user.destroy', ['user' => $user->id]) }}" onsubmit="return confirm('Xóa {{ $user->name }} ?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:underline" style="background: none; color:red; border: none; cursor: pointer;">Delete</button>
+                                        </form>
                                     </td>
                                     </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+
+                            <br />
+
+                            <div>
+                                {{ $usersPaginate->links() }}
+                            </div>
+
                         </div>
                     </div>
+
             </div>
         </div>
+
 
     </div>
 

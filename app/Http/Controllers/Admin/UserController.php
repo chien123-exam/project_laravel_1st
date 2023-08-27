@@ -7,12 +7,24 @@ use App\Http\Requests\SaveUserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 
+
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $inputs = $request->all();
+
+        $query = User::query();
+
+        if ($keyword = $request->input('keyword')) {
+            $query->where('name', 'like', "%$keyword%")
+                ->orWhere('email', 'like', "%$keyword%")
+                ->orWhere('phone', 'like', "%$keyword%");
+        }
+        $usersPaginate = $query->paginate(10);
+
         return view('users.index', [
-            'users' => User::get()
+            'usersPaginate' => $usersPaginate
         ]);
     }
 
@@ -23,22 +35,38 @@ class UserController extends Controller
 
     public function store(SaveUserRequest $request)
     {
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'gender' => $request->gender,
-            'avatar' => null,
-            'type' => User::TYPE['admin'],
-            'password' => $request->password
-        ]);
+        $inputs = $request->all();
+        $inputs['password'] = bcrypt($request->password);
+
+        User::create();
 
         return to_route('user.index');
     }
 
     public function edit($id)
     {
+        return view('users.form', [
+            'user' => User::find($id)
+        ]);
+    }
 
+    public function update(SaveUserRequest $request, $id)
+    {
+        $inputs = array_filter($request->all());
+
+        if ($request->password) {
+            $inputs['password'] = bcrypt($request->password);
+        }
+
+        User::find($id)->update($inputs);
+
+        return to_route('user.index');
+    }
+
+    public function destroy($id)
+    {
+        User::findOrFail($id)->delete();
+
+        return to_route('user.index');
     }
 }

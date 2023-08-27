@@ -207,24 +207,27 @@
                         </div>
 
                         <div class="card">
-                            <form method="post" action="{{ route('user.store') }}" class="mt-6 space-y-6">
+                            <form method="post" action="{{ $user ? route('user.update', ['user' => $user->id]) : route('user.store') }}" class="mt-6 space-y-6">
                                 @csrf
+                                @if (!empty($user))
+                                    @method('put')
+                                @endif
 
                                 <div>
                                     <x-input-label for="name" :value="__('Name')" />
-                                    <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name')"/>
+                                    <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name ?? null)"/>
                                     <x-input-error class="mt-2" :messages="$errors->get('name')" />
                                 </div>
 
                                 <div>
                                     <x-input-label for="email" :value="__('Email')" />
-                                    <x-text-input id="email" name="email" type="text" class="mt-1 block w-full" :value="old('email')"/>
+                                    <x-text-input id="email" name="email" type="text" class="mt-1 block w-full" :value="old('email', $user->email ?? null)"/>
                                     <x-input-error class="mt-2" :messages="$errors->get('email')" />
                                 </div>
 
                                 <div>
                                     <x-input-label for="phone" :value="__('Phone')" />
-                                    <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone')"/>
+                                    <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone', $user->phone ?? null)"/>
                                     <x-input-error class="mt-2" :messages="$errors->get('phone')" />
                                 </div>
 
@@ -242,7 +245,7 @@
 
                                 <div>
                                     <x-input-label for="address" :value="__('Address')" />
-                                    <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address')"/>
+                                    <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address', $user->address ?? null)"/>
                                     <x-input-error class="mt-2" :messages="$errors->get('address')" />
                                 </div>
 
@@ -250,11 +253,11 @@
                                     <x-input-label for="gender" :value="__('Gender')" />
 
                                     <label>
-                                        <input type="radio" name="gender" value="1" />Male
+                                        <input type="radio" name="gender" value="1" {{ old('gender', $user->gender ?? null) == 1 ? 'checked' : ''}} />Male
                                     </label>
 
                                     <label>
-                                        <input type="radio" name="gender" value="2" />Famale
+                                        <input type="radio" name="gender" value="2" {{ old('gender', $user->gender ?? null) == 2 ? 'checked' : ''}} />Famale
                                     </label>
 
                                     <x-input-error class="mt-2" :messages="$errors->get('gender')" />
@@ -289,6 +292,7 @@
 
     <script src="{{ asset('/template/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ asset('/template/js/script.js') }}"></script>
+
 </body>
 
 </html>
