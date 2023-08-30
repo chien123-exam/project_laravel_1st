@@ -8,9 +8,20 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
+
+    const GENDER = [
+        'male' => 1,
+        'famale' => 2
+    ];
+
+    const TYPE = [
+        'admin' => 2,
+        'student' => 1
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -19,8 +30,13 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'phone',
         'email',
         'password',
+        'type',
+        'gender',
+        'address',
+        'avatar'
     ];
 
     /**
@@ -42,4 +58,26 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function getGenderLabelAttribute()
+    {
+        if ($this->attributes['gender'] == static::GENDER['male']) {
+            return 'Male';
+        }
+
+        if ($this->attributes['gender'] == static::GENDER['famale']) {
+            return 'Famale';
+        }
+
+        return null;
+    }
+
+    public function getUserTypeAttribute()
+    {
+        if ($this->attributes['type'] == static::TYPE['admin']) {
+            return 'Admin';
+        }
+
+        return 'Student';
+    }
 }
