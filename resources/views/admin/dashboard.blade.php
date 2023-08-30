@@ -142,6 +142,7 @@
                         </div>
                         <a class="dropdown-item" href="general.html">My Profile</a>
                         <a class="dropdown-item" href="general.html">Account Settings</a>
+                        <a class="dropdown-item" href="{{ route('users.change-password') }}">Password</a>
                         <a class="dropdown-item" href="login.html">Logout</a>
                     </div>
                 </li>

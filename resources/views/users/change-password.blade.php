@@ -160,7 +160,7 @@
                             <a href="{{ route('admin.dashboard') }}"><i class="fe fe-home"></i> <span>Dashboard</span></a>
                         </li>
 
-                        <li class="active">
+                        <li>
                             <a href="{{ route('user.index') }}"><i class="fe fe-layout"></i> <span>User Management</span></a>
                         </li>
 
@@ -200,75 +200,45 @@
         </div>
 
         <div class="page-wrapper">
-            <div class="content container-fluid">
-                <div class="row">
-                    <div class="col-xl-3 col-sm-3 col-12">
-                        <div>
-                            <a href="{{ route('user.create') }}">Create New</a>
-                        </div>
+    <div class="content container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Change Password</h4>
 
-                        <div class="form-search">
-                    <form action="{{ route('user.index')}}" method="get" class="form-control" style="display: flex; align-items: center;">
-                        <input type="text" placeholder="Your keyword" name="keyword" value="{{ request()->get('keyword')}}" style="padding: 8px; border: none; border-radius: 4px;">
-                        <button class="" style="padding: 8px 16px; background-color: #3490dc; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Search</button>
-                    </form>
-                </div>
+                        <form action="{{ route('users.change-password') }}" method="post">
+                            @csrf
 
-                        <div class="card">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Role</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Gender</th>
-                                    <th scope="col">Action</th>
-                                    <th scope="col">User Detail</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($usersPaginate->items() as $user)
-                                    <tr>
-                                    <th scope="row">{{ $user->id }}</th>
-                                    <td>{{ $user->user_type }}</td>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->phone }}</td>
-                                    <td>{{ $user->address }}</td>
-                                    <td>{{ $user->gender_label }}</td>
-                                    <td>
-                                        <a href="{{ route('user.edit', ['user' => $user->id]) }}" style="background: none; color:red; border: none; cursor: pointer;" >Edit</a> |
-                                        <form method="POST" action="{{ route('user.destroy', ['user' => $user->id]) }}" onsubmit="return confirm('Xóa {{ $user->name }} ?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:underline" style="background: none; color:red; border: none; cursor: pointer;">Delete</button>
-                                        </form>
-                                    </td>
-
-                                    <td>
-                                        <a href="{{ route('user.show', ['user' => $user->id]) }}">Xem chi tiết</a>
-                                    </td>
-
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
-                            <br />
-
-                            <div>
-                                {{ $usersPaginate->links() }}
+                            <div class="form-group">
+                                <label for="old_password">Old Password</label>
+                                <input type="password" class="form-control" id="old_password" name="old_password" >
+                                <x-input-error class="mt-2" :messages="$errors->get('old_password')" />
                             </div>
-
-                        </div>
+                            <div class="form-group">
+                                <label for="new_password">New Password</label>
+                                <input type="password" class="form-control" id="new_password" name="new_password" >
+                                <x-input-error class="mt-2" :messages="$errors->get('new_password')" />
+                            </div>
+                            <div class="form-group">
+                                <label for="new_password_confirmation">Confirm New Password</label>
+                                <input type="password" class="form-control" id="new_password_confirmation" name="new_password_confirmation" >
+                                <x-input-error class="mt-2" :messages="$errors->get('new_password_confirmation')" />
+                            </div>
+                            <button type="submit" class="btn btn-primary">Change Password</button>
+                        </form>
                     </div>
-
+                </div>
+                @if(session('success'))
+                <div class="alert alert-success mt-3">
+                    {{ session('success') }}
+                </div>
+                @endif
             </div>
         </div>
+    </div>
+</div>
+
 
 
     </div>
