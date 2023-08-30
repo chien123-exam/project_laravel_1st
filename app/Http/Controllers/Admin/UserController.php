@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 
 
+
 class UserController extends Controller
 {
     public function index(Request $request)
@@ -68,5 +69,16 @@ class UserController extends Controller
         User::findOrFail($id)->delete();
 
         return to_route('user.index');
+    }
+
+    public function show(string $id)
+    {
+        $user = User::findOrFail($id);
+        $courses = $user->courses()->paginate(10);
+
+        return view('users.show', [
+            'user' => $user,
+            'courses' => $courses
+        ]);
     }
 }
