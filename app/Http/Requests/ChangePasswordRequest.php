@@ -23,7 +23,7 @@ class ChangePasswordRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'old_password' => [
                 'required',
                 function ($attribute,$value,$fail) {
@@ -34,5 +34,7 @@ class ChangePasswordRequest extends FormRequest
             ],
             'new_password' => ['required', 'min:6', 'confirmed']
         ];
+
+        return $rules;
     }
 }
