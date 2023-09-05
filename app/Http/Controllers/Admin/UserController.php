@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveUserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Repositories\CourseRepository;
+use App\Models\Course;
 
 
 
@@ -74,7 +76,14 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::findOrFail($id);
-        $courses = $user->courses()->paginate(10);
+        // Khởi tạo CourseRepository và sử dụng phương thức getCourses để lấy danh sách khoá học
+        $courseRepository = new CourseRepository(new Course);
+        $courses = $courseRepository->getCourses([
+            'search' => 'Ch', // Điều kiện tìm kiếm
+            'sort' => 'name', // Điều kiện sắp xếp
+            'order' => 'asc', // Hướng sắp xếp
+            'perPage' => 10,  // Số lượng khoá học trên mỗi trang
+        ]);
 
         return view('users.show', [
             'user' => $user,

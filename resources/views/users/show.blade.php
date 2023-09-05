@@ -216,13 +216,14 @@
                                     <li>{{ $course->name }}</li>
                                 @endforeach
                             </ul>
-                        {{ $courses->links() }}
+                            {{ $courses->links() }}
                         @endif
                     </div>
                     <div class="mt-4">
                         <a href="{{ route('user.index') }}" class="btn btn-primary">Back</a>
                     </div>
-                </div>
+</div>
+
             </div>
                 </div>
 
