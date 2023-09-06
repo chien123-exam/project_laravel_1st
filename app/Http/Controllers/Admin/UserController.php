@@ -13,6 +13,13 @@ use App\Models\Course;
 
 class UserController extends Controller
 {
+    protected $courseRepository;
+
+    public function __construct(CourseRepository $courseRepository)
+    {
+        $this->courseRepository = $courseRepository;
+    }
+
     public function index(Request $request)
     {
         $inputs = $request->all();
@@ -76,14 +83,16 @@ class UserController extends Controller
     public function show(string $id)
     {
         $user = User::findOrFail($id);
+
+        // $courses = $user->courses()->paginate(10);
         // Khởi tạo CourseRepository và sử dụng phương thức getCourses để lấy danh sách khoá học
-        $courseRepository = new CourseRepository(new Course);
-        $courses = $courseRepository->getCourses([
-            'search' => 'Ch', // Điều kiện tìm kiếm
-            'sort' => 'name', // Điều kiện sắp xếp
-            'order' => 'asc', // Hướng sắp xếp
-            'perPage' => 10,  // Số lượng khoá học trên mỗi trang
+        // $courseRepository = new CourseRepository(new Course);
+
+        $courses =  $this->courseRepository->getCoursesByUserId($user->id,[
+            'perPage' => 10, // Số lượng khoá học trên mỗi trang
         ]);
+
+        // $courses = $user->courses()->paginate(10);
 
         return view('users.show', [
             'user' => $user,

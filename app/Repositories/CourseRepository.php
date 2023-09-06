@@ -12,10 +12,15 @@ class CourseRepository extends BaseRepository
         $this->model = $course;
     }
 
-    public function getCourses(array $input = [])
+    public function getCoursesByUserId($userId, array $input = [])
     {
         // Bắt đầu với một truy vấn cơ sở dữ liệu dựa trên model Course
         $query = $this->model->query();
+
+        // Truy vấn theo user_id
+        $query->whereHas('users', function ($userQuery) use ($userId) {
+            $userQuery->where('user_id', $userId);
+        });
 
         // Xử lý các điều kiện tìm kiếm hoặc sắp xếp nếu có
         if (!empty($input['search'])) {
@@ -33,6 +38,7 @@ class CourseRepository extends BaseRepository
         // Sử dụng paginate để lấy danh sách khoá học
         return $query->paginate($input['perPage'] ?? 10);
     }
+
 }
 
 

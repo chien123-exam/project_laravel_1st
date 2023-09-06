@@ -18,4 +18,9 @@ class BaseRepository
         return $this->model->all();
     }
 
+    public function save(array $inputs, array $conditions = ['id' => null])
+    {
+        return $this->model->updateOrCreate($conditions, $inputs);
+    }
+
 }
