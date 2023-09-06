@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\CheckOldPassword;
+use App\Rules\Uppercase;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -24,14 +26,7 @@ class ChangePasswordRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'old_password' => [
-                'required',
-                function ($attribute,$value,$fail) {
-                    if (!Hash::check($value, Auth::user()->password)) {
-                        $fail('Password not found ');
-                    }
-                },
-            ],
+            'old_password' => ['required',  new CheckOldPassword ],
             'new_password' => ['required', 'min:6', 'confirmed']
         ];
 
