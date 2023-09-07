@@ -236,6 +236,7 @@
                                     <th>Giá</th>
                                     <th>Số bài học</th>
                                     <th>Link</th>
+                                    <th>Category</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -245,6 +246,7 @@
                                         <td>{{ $course->price }}</td>
                                         <td>{{ $course->lessons }}</td>
                                         <td>{{ $course->link }}</td>
+                                        <td>{{ optional($course->category)->name }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>

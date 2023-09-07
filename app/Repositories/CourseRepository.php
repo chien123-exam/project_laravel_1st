@@ -22,21 +22,11 @@ class CourseRepository extends BaseRepository
             $userQuery->where('user_id', $userId);
         });
 
-        // Xử lý các điều kiện tìm kiếm hoặc sắp xếp nếu có
-        if (!empty($input['search'])) {
-            $query->where('name', 'like', '%' . $input['search'] . '%');
+        if (! empty($input['perPage'])) {
+            return $query->paginate($input['perPage']);
         }
 
-        if (!empty($input['sort'])) {
-            // Xử lý sắp xếp dựa trên các cột cụ thể
-            $sortColumn = $input['sort'];
-            if (Schema::hasColumn($this->model->getTable(), $sortColumn)) {
-                $query->orderBy($sortColumn, $input['order'] ?? 'asc');
-            }
-        }
-
-        // Sử dụng paginate để lấy danh sách khoá học
-        return $query->paginate($input['perPage'] ?? 10);
+        return $query->get();
     }
 
 }

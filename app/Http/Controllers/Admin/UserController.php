@@ -9,8 +9,6 @@ use App\Models\User;
 use App\Repositories\CourseRepository;
 use App\Models\Course;
 
-
-
 class UserController extends Controller
 {
     protected $courseRepository;
@@ -18,6 +16,7 @@ class UserController extends Controller
     public function __construct(CourseRepository $courseRepository)
     {
         $this->courseRepository = $courseRepository;
+
     }
 
     public function index(Request $request)
@@ -84,15 +83,9 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
 
-        // $courses = $user->courses()->paginate(10);
-        // Khởi tạo CourseRepository và sử dụng phương thức getCourses để lấy danh sách khoá học
-        // $courseRepository = new CourseRepository(new Course);
-
         $courses =  $this->courseRepository->getCoursesByUserId($user->id,[
             'perPage' => 10, // Số lượng khoá học trên mỗi trang
         ]);
-
-        // $courses = $user->courses()->paginate(10);
 
         return view('users.show', [
             'user' => $user,
