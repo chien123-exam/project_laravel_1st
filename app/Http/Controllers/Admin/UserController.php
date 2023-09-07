@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveUserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
+
 use App\Repositories\CourseRepository;
 use App\Models\Course;
 
