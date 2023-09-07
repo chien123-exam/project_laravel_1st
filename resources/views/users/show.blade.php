@@ -199,34 +199,72 @@
         </div>
 
         <div class="page-wrapper">
-            <div class="content container-fluid">
-                <div class="row">
-                <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h2 class="text-xl font-semibold mb-4">User name: {{ $user->name }}</h2>
-                    </div>
-                    <div class="card-body">
-                        <h3 class="font-semibold">Danh Sách Khóa Học</h3>
-                        @if ($courses->isEmpty())
+        <div class="py-12">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>User Detail</h2>
+                <table class="table" style="border: 1px solid #333; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Giới tính</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->phone }}</td>
+                                <td>{{ $user->gender_label }}</td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h2>DS Course</h2>
+                <table class="table" >
+                    @if ($courses->isEmpty())
                             <p>Người dùng này chưa được ghi danh vào bất kỳ khóa học nào.</p>
                         @else
-                            <ul>
-                                @foreach ($courses as $course)
-                                    <li>{{ $course->name }}</li>
+                        <table class="table" style="border: 1px solid #333; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th>Tên khóa học</th>
+                                    <th>Giá</th>
+                                    <th>Số bài học</th>
+                                    <th>Link</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($courses as $course)
+                                    <tr>
+                                        <td>{{ $course->name }}</td>
+                                        <td>{{ $course->price }}</td>
+                                        <td>{{ $course->lessons }}</td>
+                                        <td>{{ $course->link }}</td>
+                                        <td>{{ optional($course->category)->name }}</td>
+                                    </tr>
                                 @endforeach
-                            </ul>
-                        {{ $courses->links() }}
-                        @endif
-                    </div>
-                    <div class="mt-4">
-                        <a href="{{ route('user.index') }}" class="btn btn-primary">Back</a>
-                    </div>
-                </div>
+                            </tbody>
+                        </table>
+                            {{ $courses->links() }}
+                    @endif
+                </table>
             </div>
-                </div>
+            <div class="mt-4">
+                <a href="{{ route('user.index') }}" class="btn btn-primary">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-            </div>
+        </div>
+
+
         </div>
 
 
