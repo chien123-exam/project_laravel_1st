@@ -80,4 +80,12 @@ class User extends Authenticatable
 
         return 'Student';
     }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'course_user')
+            ->withPivot('paid')
+            ->withTimestamps();
+    }
+
 }

@@ -6,10 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SaveUserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
-
+use App\Repositories\CourseRepository;
+use App\Models\Course;
 
 class UserController extends Controller
 {
+    protected $courseRepository;
+
+    public function __construct(CourseRepository $courseRepository)
+    {
+        $this->courseRepository = $courseRepository;
+
+    }
+
     public function index(Request $request)
     {
         $inputs = $request->all();
@@ -68,5 +77,19 @@ class UserController extends Controller
         User::findOrFail($id)->delete();
 
         return to_route('user.index');
+    }
+
+    public function show(string $id)
+    {
+        $user = User::findOrFail($id);
+
+        $courses =  $this->courseRepository->getCoursesByUserId($user->id,[
+            'perPage' => 10, // Số lượng khoá học trên mỗi trang
+        ]);
+
+        return view('users.show', [
+            'user' => $user,
+            'courses' => $courses
+        ]);
     }
 }

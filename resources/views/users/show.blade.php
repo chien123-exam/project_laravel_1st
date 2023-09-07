@@ -199,74 +199,72 @@
         </div>
 
         <div class="page-wrapper">
-            <div class="content container-fluid">
-                <div class="row">
-                    <div class="col-xl-3 col-sm-3 col-12">
-                        <div>
-                            <a href="{{ route('user.create') }}">Create New</a>
-                        </div>
-
-                        <div class="form-search">
-                    <form action="{{ route('user.index')}}" method="get" class="form-control" style="display: flex; align-items: center;">
-                        <input type="text" placeholder="Your keyword" name="keyword" value="{{ request()->get('keyword')}}" style="padding: 8px; border: none; border-radius: 4px;">
-                        <button class="" style="padding: 8px 16px; background-color: #3490dc; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Search</button>
-                    </form>
-                </div>
-
-                        <div class="card">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Role</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Gender</th>
-                                    <th scope="col">Action</th>
-                                    <th scope="col">User Detail</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($usersPaginate->items() as $user)
-                                    <tr>
-                                    <th scope="row">{{ $user->id }}</th>
-                                    <td>{{ $user->user_type }}</td>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->phone }}</td>
-                                    <td>{{ $user->address }}</td>
-                                    <td>{{ $user->gender_label }}</td>
-                                    <td>
-                                        <a href="{{ route('user.edit', ['user' => $user->id]) }}" style="background: none; color:red; border: none; cursor: pointer;" >Edit</a> |
-                                        <form method="POST" action="{{ route('user.destroy', ['user' => $user->id]) }}" onsubmit="return confirm('Xóa {{ $user->name }} ?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:underline" style="background: none; color:red; border: none; cursor: pointer;">Delete</button>
-                                        </form>
-                                    </td>
-
-                                    <td>
-                                        <a href="{{ route('user.show', ['user' => $user->id]) }}">Xem chi tiết</a>
-                                    </td>
-
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
-                            <br />
-
-                            <div>
-                                {{ $usersPaginate->links() }}
-                            </div>
-
-                        </div>
-                    </div>
-
+        <div class="py-12">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>User Detail</h2>
+                <table class="table" style="border: 1px solid #333; border-collapse: collapse;">
+                    <thead>
+                        <tr>
+                            <th>Tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Giới tính</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <tr>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->phone }}</td>
+                                <td>{{ $user->gender_label }}</td>
+                            </tr>
+                    </tbody>
+                </table>
             </div>
+            <div class="col-md-6">
+                <h2>DS Course</h2>
+                <table class="table" >
+                    @if ($courses->isEmpty())
+                            <p>Người dùng này chưa được ghi danh vào bất kỳ khóa học nào.</p>
+                        @else
+                        <table class="table" style="border: 1px solid #333; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th>Tên khóa học</th>
+                                    <th>Giá</th>
+                                    <th>Số bài học</th>
+                                    <th>Link</th>
+                                    <th>Category</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($courses as $course)
+                                    <tr>
+                                        <td>{{ $course->name }}</td>
+                                        <td>{{ $course->price }}</td>
+                                        <td>{{ $course->lessons }}</td>
+                                        <td>{{ $course->link }}</td>
+                                        <td>{{ optional($course->category)->name }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                            {{ $courses->links() }}
+                    @endif
+                </table>
+            </div>
+            <div class="mt-4">
+                <a href="{{ route('user.index') }}" class="btn btn-primary">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+        </div>
+
+
         </div>
 
 
