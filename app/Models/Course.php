@@ -9,6 +9,28 @@ class Course extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'slug',
+        'link',
+        'price',
+        'old_price',
+        'created_by',
+        'category_id',
+        'lessons',
+        'sections',
+        'view_count',
+        'benefits',
+        'fqa',
+        'is_feature',
+        'is_online',
+        'description',
+        'content',
+        'meta_title',
+        'meta_desc',
+        'meta_keyword',
+    ];
+
     public function user()
     {
         return $this->belongsToMany(User::class, 'course_user')
