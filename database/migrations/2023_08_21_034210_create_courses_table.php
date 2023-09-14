@@ -21,11 +21,12 @@ return new class extends Migration
             $table->bigInteger('created_by')->default(0);
             $table->bigInteger('category_id')->nullable()->default(0);
             $table->integer('lessons')->nullable()->default(0);
+            $table->integer('sections')->nullable()->default(0);
             $table->integer('view_count')->nullable()->default(0);
             $table->json('benefits')->nullable();
             $table->json('fqa')->nullable()->default(null);
             $table->tinyInteger('is_feature');
-            $table->tinyInteger('is_online');
+            $table->tinyInteger('is_online')->comment('1: online; 2: offline');
             $table->text('description');
             $table->longText('content');
             $table->string('meta_title');

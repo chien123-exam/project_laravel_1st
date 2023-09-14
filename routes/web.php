@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ChangePasswordController;
+use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
@@ -10,11 +11,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'verified', 'isAdmin'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::resource('user', UserController::class);
     Route::get('/change-password', [ChangePasswordController::class, 'showChangePassword'])->name('users.change-password');
     Route::post('/change-password', [ChangePasswordController::class, 'changePassword']);
+    Route::resource('course', CourseController::class);
 });
 
 

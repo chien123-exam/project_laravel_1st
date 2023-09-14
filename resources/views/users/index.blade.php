@@ -143,7 +143,12 @@
                         <a class="dropdown-item" href="general.html">My Profile</a>
                         <a class="dropdown-item" href="general.html">Account Settings</a>
                         <a class="dropdown-item" href="{{ route('users.change-password') }}">Password</a>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                {{ __('Log Out') }}
+                            </button>
+                        </form>
                     </div>
                 </li>
 
@@ -174,7 +179,7 @@
                             <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Đơn đặt hàng</span></a>
                         </li>
                         <li>
-                            <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Quản lý khách hàng</span></a>
+                            <a href="{{ route('course.index') }}"><i class="fe fe-layout"></i> <span>Quản lý khách hàng</span></a>
                         </li>
                         <li class="submenu">
                             <a href="#"><i class="fe fe-users"></i> <span> Tài khoản </span> <span
@@ -200,72 +205,67 @@
         </div>
 
         <div class="page-wrapper">
-            <div class="content container-fluid">
-                <div class="row">
-                    <div class="col-xl-3 col-sm-3 col-12">
-                        <div>
-                            <a href="{{ route('user.create') }}">Create New</a>
-                        </div>
-
-                        <div class="form-search">
-                    <form action="{{ route('user.index')}}" method="get" class="form-control" style="display: flex; align-items: center;">
-                        <input type="text" placeholder="Your keyword" name="keyword" value="{{ request()->get('keyword')}}" style="padding: 8px; border: none; border-radius: 4px;">
-                        <button class="" style="padding: 8px 16px; background-color: #3490dc; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Search</button>
-                    </form>
-                </div>
-
-                        <div class="card">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Role</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Phone</th>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Gender</th>
-                                    <th scope="col">Action</th>
-                                    <th scope="col">User Detail</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    @foreach ($usersPaginate->items() as $user)
-                                    <tr>
-                                    <th scope="row">{{ $user->id }}</th>
-                                    <td>{{ $user->user_type }}</td>
-                                    <td>{{ $user->name }}</td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>{{ $user->phone }}</td>
-                                    <td>{{ $user->address }}</td>
-                                    <td>{{ $user->gender_label }}</td>
-                                    <td>
-                                        <a href="{{ route('user.edit', ['user' => $user->id]) }}" style="background: none; color:red; border: none; cursor: pointer;" >Edit</a> |
-                                        <form method="POST" action="{{ route('user.destroy', ['user' => $user->id]) }}" onsubmit="return confirm('Xóa {{ $user->name }} ?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-500 hover:underline" style="background: none; color:red; border: none; cursor: pointer;">Delete</button>
-                                        </form>
-                                    </td>
-
-                                    <td>
-                                        <a href="{{ route('user.show', ['user' => $user->id]) }}">Xem chi tiết</a>
-                                    </td>
-
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-
-                            <br />
-
-                            <div>
-                                {{ $usersPaginate->links() }}
-                            </div>
-
-                        </div>
+                    <div>
+                        <a href="{{ route('user.create') }}">Create New</a>
                     </div>
+
+                    <div class="form-search">
+                        <form action="{{ route('user.index')}}" method="get" class="form-control" style="display: flex; align-items: center;">
+                            <input type="text" placeholder="Your keyword" name="keyword" value="{{ request()->get('keyword')}}" style="padding: 8px; border: none; border-radius: 4px;">
+                            <button class="" style="padding: 8px 16px; background-color: #3490dc; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Search</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Role</th>
+                                <th scope="col">Name</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Phone</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Action</th>
+                                <th scope="col">User Detail</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach ($usersPaginate->items() as $user)
+                                <tr>
+                                <th scope="row">{{ $user->id }}</th>
+                                <td>{{ $user->user_type }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>{{ $user->phone }}</td>
+                                <td>{{ $user->gender_label }}</td>
+                                <td>
+                                    <a href="{{ route('user.edit', ['user' => $user->id]) }}" style="background: none; color:red; border: none; cursor: pointer;" >Edit</a> |
+                                    <form method="POST" action="{{ route('user.destroy', ['user' => $user->id]) }}" onsubmit="return confirm('Xóa {{ $user->name }} ?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-500 hover:underline" style="background: none; color:red; border: none; cursor: pointer;">Delete</button>
+                                    </form>
+                                </td>
+
+                                <td>
+                                    <a href="{{ route('user.show', ['user' => $user->id]) }}">Xem chi tiết</a>
+                                </td>
+
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+
+                        <br />
+
+                        <div>
+                            {{ $usersPaginate->links() }}
+                        </div>
+
+                    </div>
+                </div>
 
             </div>
         </div>

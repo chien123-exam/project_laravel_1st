@@ -24,13 +24,20 @@ class CourseFactory extends Factory
             'price' => $this->faker->randomFloat(2, 10, 500),
             'old_price' => $this->faker->randomFloat(2, 10, 500),
             'created_by' => $this->faker->randomNumber(),
-            'category_id' => $this->faker->randomNumber(),
-            'lessons' => $this->faker->randomNumber(),
+            'category_id' => \App\Models\Category::inRandomOrder()->first()->id,
+            'lessons' => function () {
+                // Lấy một lesson_id ngẫu nhiên từ bảng 'lessons'
+                return \App\Models\Lesson::inRandomOrder()->first()->id;
+            },
+            'sections' => function () {
+                // Lấy một section_id ngẫu nhiên từ bảng 'sections'
+                return \App\Models\Section::inRandomOrder()->first()->id;
+            },
             'view_count' => $this->faker->randomNumber(),
             'benefits' => json_encode([$this->faker->sentence, $this->faker->sentence]),
             'fqa' => json_encode([$this->faker->sentence, $this->faker->sentence]),
             'is_feature' => $this->faker->randomElement([0, 1]),
-            'is_online' => $this->faker->randomElement([0, 1]),
+            'is_online' => random_int(1, 2),
             'description' => $this->faker->paragraph,
             'content' => $this->faker->paragraphs(3, true),
             'meta_title' => $this->faker->sentence,
