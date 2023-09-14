@@ -159,7 +159,7 @@
                             <a href="index.html"><i class="fe fe-home"></i> <span>Dashboard</span></a>
                         </li>
 
-                        <li class="active">
+                        <li>
                             <a href="{{ route('user.index') }}"><i class="fe fe-layout"></i> <span>User Management</span></a>
                         </li>
 
@@ -172,7 +172,7 @@
                         <li>
                             <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Đơn đặt hàng</span></a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Quản lý khách hàng</span></a>
                         </li>
                         <li class="submenu">
@@ -203,80 +203,139 @@
                 <div class="row">
                     <div class="">
                         <div>
-                            <a href="{{ route('user.index') }}">Back</a>
+                            <a href="{{ route('course.index') }}">Back</a>
                         </div>
 
                         <div class="card">
-                            <form method="post" action="{{ isset($user) ? route('user.update', ['user' => $user->id]) : route('user.store') }}" class="mt-6 space-y-6">
-                                @csrf
-                                @if (!empty($user))
-                                    @method('put')
-                                @endif
+                        <form method="post" action="{{ isset($course) ? route('course.update', ['course' => $course->id]) : route('course.store')}}" class="mt-6 space-y-6" enctype="multipart/form-data">
+                        @csrf
 
-                                <div>
-                                    <x-input-label for="name" :value="__('Name')" />
-                                    <x-text-input id="name" name="name" type="text" class="form-input" :value="old('name', $user->name ?? null)"/>
-                                    <x-input-error class="mt-2" :messages="$errors->get('name')" />
-                                </div>
+                        @if(!empty($course))
+                            @method('put')
+                        @endif
 
-                                <div>
-                                    <x-input-label for="email" :value="__('Email')" />
-                                    <x-text-input id="email" name="email" type="text" class="form-input" :value="old('email', $user->email ?? null)"/>
-                                    <x-input-error class="mt-2" :messages="$errors->get('email')" />
-                                </div>
+                        <div>
+                            <x-input-label for="name" :value="__('Name')" />
+                            <x-text-input id="name" name="name" type="text" class="form-input" :value="old('name', $course->name ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                        </div>
 
-                                <div>
-                                    <x-input-label for="phone" :value="__('Phone')" />
-                                    <x-text-input id="phone" name="phone" type="text" class="form-input" :value="old('phone', $user->phone ?? null)"/>
-                                    <x-input-error class="mt-2" :messages="$errors->get('phone')" />
-                                </div>
+                        <div>
+                            <x-input-label for="slug" :value="__('Slug')" />
+                            <x-text-input id="slug" name="slug" type="text" class="form-input" :value="old('slug', $course->slug ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('slug')" />
+                        </div>
 
-                                <div>
-                                    <x-input-label for="password" :value="__('Password')" />
-                                    <x-text-input id="password" name="password" type="password" class="form-input" :value="old('password')"/>
-                                    <x-input-error class="mt-2" :messages="$errors->get('password')" />
-                                </div>
+                        <div>
+                            <x-input-label for="link" :value="__('Link')" />
+                            <x-text-input id="link" name="link" type="text" class="form-input" :value="old('link', $course->link ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('link')" />
+                        </div>
 
-                                <div>
-                                    <x-input-label for="password_confirm" :value="__('Password_confirm')" />
-                                    <x-text-input id="password_confirm" name="password_confirm" type="password" class="form-input" :value="old('password_confirm')"/>
-                                    <x-input-error class="mt-2" :messages="$errors->get('password_confirm')" />
-                                </div>
+                        <div>
+                            <x-input-label for="price" :value="__('Price')" />
+                            <x-text-input id="price" name="price" type="text" class="form-input" :value="old('price', $course->price ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('price')" />
+                        </div>
 
-                                <div>
-                                    <x-input-label for="address" :value="__('Address')" />
-                                    <x-text-input id="address" name="address" type="text" class="form-input" :value="old('address', $user->address ?? null)"/>
-                                    <x-input-error class="mt-2" :messages="$errors->get('address')" />
-                                </div>
+                        <div>
+                            <x-input-label for="old_price" :value="__('Old Price')" />
+                            <x-text-input id="old_price" name="old_price" type="text" class="form-input" :value="old('old_price', $course->old_price ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('old_price')" />
+                        </div>
 
-                                <div>
-                                    <x-input-label for="gender" :value="__('Gender')" />
+                        <div>
+                            <x-input-label for="created_by" :value="__('Created By')" />
+                            <x-text-input id="created_by" name="created_by" type="text" class="form-input" :value="old('created_by', $course->created_by ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('created_by')" />
+                        </div>
 
-                                    <label>
-                                        <input type="radio" name="gender" value="1" {{ old('gender', $user->gender ?? null) == 1 ? 'checked' : ''}} />Male
-                                    </label>
+                        <div>
+                            <x-input-label for="category_id" :value="__('Category ID')" />
+                            <x-text-input id="category_id" name="category_id" type="text" class="form-input" :value="old('category_id', $course->category_id ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
+                        </div>
 
-                                    <label>
-                                        <input type="radio" name="gender" value="2" {{ old('gender', $user->gender ?? null) == 2 ? 'checked' : ''}} />Famale
-                                    </label>
+                        <div>
+                            <x-input-label for="lessons" :value="__('Lessons')" />
+                            <x-text-input id="lessons" name="lessons" type="text" class="form-input" :value="old('lessons', $course->lessons ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('lessons')" />
+                        </div>
 
-                                    <x-input-error class="mt-2" :messages="$errors->get('gender')" />
-                                </div>
+                        <div>
+                            <x-input-label for="sections" :value="__('Sections')" />
+                            <x-text-input id="sections" name="sections" type="text" class="form-input" :value="old('sections', $course->sections ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('sections')" />
+                        </div>
 
-                                <div>
-                                    <x-input-label for="avatar" :value="__('Avatar')" />
+                        <div>
+                            <x-input-label for="view_count" :value="__('View count')" />
+                            <x-text-input id="view_count" name="view_count" type="text" class="form-input" :value="old('view_count', $course->view_count ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('view_count')" />
+                        </div>
 
-                                    <label>
-                                        <input type="file" name="avatar" />
-                                    </label>
+                        <div>
+                            <x-input-label for="benefits" :value="__('Benefits')" />
+                            <x-text-input id="benefits" name="benefits" type="text" class="form-input" :value="old('benefits', $course->benefits ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('benefits')" />
+                        </div>
 
-                                    <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
-                                </div>
+                        <div>
+                            <x-input-label for="fqa" :value="__('FQA')" />
+                            <x-text-input id="fqa" name="fqa" type="text" class="form-input" :value="old('fqa', $course->fqa ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('fqa')" />
+                        </div>
 
-                                <div class="flex items-center gap-4">
-                                    <x-primary-button>{{ __('Save') }}</x-primary-button>
-                                </div>
-                            </form>
+
+                        <div>
+                            <x-input-label for="is_feature" :value="__('Is feature')" />
+                            <x-text-input id="is_feature" name="is_feature" type="text" class="form-input" :value="old('is_feature', $course->is_feature ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('is_feature')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="is_online" :value="__('Is online')" />
+                            <x-text-input id="is_online" name="is_online" type="text" class="form-input" :value="old('is_online', $course->is_online ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('is_online')" />
+                        </div>
+
+                         <div>
+                            <x-input-label for="description" :value="__('Description')" />
+                            <x-text-input id="description" name="description" type="text" class="form-input" :value="old('description', $course->description ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('description')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="content" :value="__('Content')" />
+                            <x-text-input id="content" name="content" type="text" class="form-input" :value="old('content', $course->content ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('content')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="meta_title" :value="__('Meta title')" />
+                            <x-text-input id="meta_title" name="meta_title" type="text" class="form-input" :value="old('meta_title', $course->meta_title ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('meta_title')" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="meta_desc" :value="__('Meta desc')" />
+                            <x-text-input id="meta_desc" name="meta_desc" type="text" class="form-input" :value="old('meta_desc', $course->meta_desc ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('meta_desc')" />
+                        </div>
+
+
+                        <div>
+                            <x-input-label for="meta_keyword" :value="__('Meta keyword')" />
+                            <x-text-input id="meta_keyword" name="meta_keyword" type="text" class="form-input" :value="old('meta_keyword', $course->meta_keyword ?? null)" />
+                            <x-input-error class="mt-2" :messages="$errors->get('meta_keyword')" />
+                        </div>
+
+
+                        <div class="flex items-center gap-4">
+                            <x-primary-button>{{ __('Save') }}</x-primary-button>
+                        </div>
+                        
+                    </form>
                         </div>
                     </div>
             </div>
