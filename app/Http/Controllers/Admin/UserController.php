@@ -48,7 +48,7 @@ class UserController extends Controller
         $inputs = $request->all();
         $inputs['password'] = bcrypt($request->password);
 
-        User::create();
+        User::create($inputs);
 
         return to_route('user.index');
     }

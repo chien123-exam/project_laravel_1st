@@ -173,7 +173,7 @@
                             <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Đơn đặt hàng</span></a>
                         </li>
                         <li>
-                            <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Quản lý khách hàng</span></a>
+                            <a href="{{ route('course.index') }}"><i class="fe fe-layout"></i> <span>Quản lý khách hàng</span></a>
                         </li>
                         <li class="submenu">
                             <a href="#"><i class="fe fe-users"></i> <span> Tài khoản </span> <span

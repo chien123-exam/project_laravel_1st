@@ -9,7 +9,7 @@ class Course extends Model
 {
     use HasFactory;
 
-    public function users()
+    public function user()
     {
         return $this->belongsToMany(User::class, 'course_user')
             ->withPivot('paid')
@@ -18,7 +18,22 @@ class Course extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'course_user');
+    }
+
+    public function sections()
+    {
+        return $this->hasMany(Section::class);
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
     }
 
 }
