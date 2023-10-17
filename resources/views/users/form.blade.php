@@ -263,7 +263,7 @@
                                     <x-input-error class="mt-2" :messages="$errors->get('gender')" />
                                 </div>
 
-                                <div>
+                                <!-- <div>
                                     <x-input-label for="avatar" :value="__('Avatar')" />
 
                                     <label>
@@ -271,7 +271,7 @@
                                     </label>
 
                                     <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
-                                </div>
+                                </div> -->
 
                                 <div class="flex items-center gap-4">
                                     <x-primary-button>{{ __('Save') }}</x-primary-button>

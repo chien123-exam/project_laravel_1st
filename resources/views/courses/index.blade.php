@@ -177,7 +177,7 @@
                             <a href="product.html"><i class="fe fe-layout"></i> <span>Quản lý sản phẩm</span></a>
                         </li>
                         <li>
-                            <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Đơn đặt hàng</span></a>
+                            <a href="{{ route('order.index') }}"><i class="fe fe-layout"></i> <span>Đơn đặt hàng</span></a>
                         </li>
                         <li class="active">
                             <a href="{{ route('course.index') }}"><i class="fe fe-layout"></i> <span>Quản lý khách hàng</span></a>

@@ -24,7 +24,7 @@ class SaveCourseRequest extends FormRequest
         return [
             'name' => 'required|string|max:255|unique:courses',
             'slug' => 'required|string|unique:courses',
-            'link' => 'required|url',
+            'link' => 'required',
             'price' => 'required|numeric|min:0',
             'old_price' => 'required|numeric|min:0',
             'created_by' => 'required|numeric',

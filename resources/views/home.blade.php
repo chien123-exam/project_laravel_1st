@@ -142,7 +142,13 @@
                         </div>
                         <a class="dropdown-item" href="general.html">My Profile</a>
                         <a class="dropdown-item" href="general.html">Account Settings</a>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <a class="dropdown-item" href="{{ route('users.change-password') }}">Password</a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                {{ __('Log Out') }}
+                            </button>
+                        </form>
                     </div>
                 </li>
 
@@ -156,10 +162,10 @@
                 <div id="sidebar-menu" class="sidebar-menu">
                     <ul>
                         <li>
-                            <a href="index.html"><i class="fe fe-home"></i> <span>Dashboard</span></a>
+                            <a href="{{ route('admin.dashboard') }}"><i class="fe fe-home"></i> <span>Dashboard</span></a>
                         </li>
 
-                        <li>
+                        <li class=>
                             <a href="{{ route('user.index') }}"><i class="fe fe-layout"></i> <span>User Management</span></a>
                         </li>
 
@@ -173,7 +179,7 @@
                             <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Đơn đặt hàng</span></a>
                         </li>
                         <li class="active">
-                            <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Quản lý khách hàng</span></a>
+                            <a href="{{ route('course.index') }}"><i class="fe fe-layout"></i> <span>Quản lý khách hàng</span></a>
                         </li>
                         <li class="submenu">
                             <a href="#"><i class="fe fe-users"></i> <span> Tài khoản </span> <span
@@ -199,152 +205,78 @@
         </div>
 
         <div class="page-wrapper">
-            <div class="content container-fluid">
-                <div class="row">
-                    <div class="">
-                        <div>
-                            <a href="{{ route('course.index') }}">Back</a>
-                        </div>
-
-                        <div class="card">
-                        <form method="post" action="{{ isset($course) ? route('course.update', ['course' => $course->id]) : route('course.store')}}" class="mt-6 space-y-6" enctype="multipart/form-data">
-                        @csrf
-
-                        @if(!empty($course))
-                            @method('put')
-                        @endif
-
-                        <div>
-                            <x-input-label for="name" :value="__('Name')" />
-                            <x-text-input id="name" name="name" type="text" class="form-input" :value="old('name', $course->name ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('name')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="slug" :value="__('Slug')" />
-                            <x-text-input id="slug" name="slug" type="text" class="form-input" :value="old('slug', $course->slug ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('slug')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="link" :value="__('Link')" />
-                            <x-text-input id="link" name="link" type="text" class="form-input" :value="old('link', $course->link ?? null)" />
-                            <!-- <input type="file" name="link"> -->
-                            <x-input-error class="mt-2" :messages="$errors->get('link')" />
-
-                        </div>
-
-                        <div>
-                            <x-input-label for="price" :value="__('Price')" />
-                            <x-text-input id="price" name="price" type="text" class="form-input" :value="old('price', $course->price ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('price')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="old_price" :value="__('Old Price')" />
-                            <x-text-input id="old_price" name="old_price" type="text" class="form-input" :value="old('old_price', $course->old_price ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('old_price')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="created_by" :value="__('Created By')" />
-                            <x-text-input id="created_by" name="created_by" type="text" class="form-input" :value="old('created_by', $course->created_by ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('created_by')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="category_id" :value="__('Category ID')" />
-                            <x-text-input id="category_id" name="category_id" type="text" class="form-input" :value="old('category_id', $course->category_id ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="lessons" :value="__('Lessons')" />
-                            <x-text-input id="lessons" name="lessons" type="text" class="form-input" :value="old('lessons', $course->lessons ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('lessons')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="sections" :value="__('Sections')" />
-                            <x-text-input id="sections" name="sections" type="text" class="form-input" :value="old('sections', $course->sections ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('sections')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="view_count" :value="__('View count')" />
-                            <x-text-input id="view_count" name="view_count" type="text" class="form-input" :value="old('view_count', $course->view_count ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('view_count')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="benefits" :value="__('Benefits')" />
-                            <x-text-input id="benefits" name="benefits" type="text" class="form-input" :value="old('benefits', $course->benefits ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('benefits')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="fqa" :value="__('FQA')" />
-                            <x-text-input id="fqa" name="fqa" type="text" class="form-input" :value="old('fqa', $course->fqa ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('fqa')" />
-                        </div>
-
-
-                        <div>
-                            <x-input-label for="is_feature" :value="__('Is feature')" />
-                            <x-text-input id="is_feature" name="is_feature" type="text" class="form-input" :value="old('is_feature', $course->is_feature ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('is_feature')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="is_online" :value="__('Is online')" />
-                            <x-text-input id="is_online" name="is_online" type="text" class="form-input" :value="old('is_online', $course->is_online ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('is_online')" />
-                        </div>
-
-                         <div>
-                            <x-input-label for="description" :value="__('Description')" />
-                            <x-text-input id="description" name="description" type="text" class="form-input" :value="old('description', $course->description ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('description')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="content" :value="__('Content')" />
-                            <x-text-input id="content" name="content" type="text" class="form-input" :value="old('content', $course->content ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('content')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="meta_title" :value="__('Meta title')" />
-                            <x-text-input id="meta_title" name="meta_title" type="text" class="form-input" :value="old('meta_title', $course->meta_title ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('meta_title')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="meta_desc" :value="__('Meta desc')" />
-                            <x-text-input id="meta_desc" name="meta_desc" type="text" class="form-input" :value="old('meta_desc', $course->meta_desc ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('meta_desc')" />
-                        </div>
-
-
-                        <div>
-                            <x-input-label for="meta_keyword" :value="__('Meta keyword')" />
-                            <x-text-input id="meta_keyword" name="meta_keyword" type="text" class="form-input" :value="old('meta_keyword', $course->meta_keyword ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('meta_keyword')" />
-                        </div>
-
-
-                        <div class="flex items-center gap-4">
-                            <x-primary-button>{{ __('Save') }}</x-primary-button>
-                        </div>
-
-                    </form>
-                        </div>
+                    <div>
+                        <a href="{{ route('course.create') }}">Create New</a>
                     </div>
+
+                    <div class="form-search">
+                        <form action="{{ route('course.index')}}" method="get" class="form-control" style="display: flex; align-items: center;">
+                            <input type="text" placeholder="Your keyword" name="keyword" value="{{ request()->get('keyword')}}" style="padding: 8px; border: none; border-radius: 4px;">
+                            <button class="" style="padding: 8px 16px; background-color: #3490dc; color: #fff; border: none; border-radius: 4px; cursor: pointer;">Search</button>
+                        </form>
+                    </div>
+
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Tên khóa học</th>
+                                <th scope="col">Tên danh mục</th>
+                                <th scope="col">Phương thức</th>
+                                <th scope="col">Tổng số học viên</th>
+                                <th scope="col">Tổng số bài học</th>
+                                <th scope="col">Tổng số chương</th>
+                                <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+
+
+                            <tbody>
+                                @foreach ($courses as $course)
+                                    <tr>
+                                        <th scope="row">{{ $course->id }}</th>
+                                        <td>{{ $course->name }}</td>
+                                        <td>{{ optional($course->category)->name }}</td>
+                                        <td class="text-center {{ $course->is_online == 1 ? 'text-primary' : 'text-success'}}">{{ $course->is_online == 1 ? 'Online' : 'Offline'}}</td>
+                                        <td class="text-center">{{ $course->user_count }}</td>
+                                        <td class="text-center">{{ $course->lessons }}</td>
+                                        <td class="text-center">{{ $course->sections }}</td>
+                                        <td>
+                                            <a
+                                                href="{{ route('course.edit', ['course' => $course->id]) }}"class="text-info">Edit</a>
+                                            <form method="POST"
+                                                action="{{ route('course.destroy', ['course' => $course->id]) }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-danger" style="border: none;"
+                                                    onclick="return confirm('Bạn có chắc muốn xóa khóa học {{ $course->name }}?')">
+                                                    Delete
+                                                </button>
+
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <br>
+                            <div>
+                                {{ $courses->links() }}
+                            </div>
+                        <br />
+
+                        <div>
+                        </div>
+
+                    </div>
+                </div>
+
             </div>
         </div>
 
-    </div>
 
+    </div>
 
 
     <script src="{{ asset('/template/js/jquery-3.6.0.min.js') }}"></script>
@@ -353,46 +285,7 @@
 
     <script src="{{ asset('/template/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ asset('/template/js/script.js') }}"></script>
-
-    <style>
-    /* CSS tùy chỉnh cho form và các thẻ input */
-    .card {
-        width: 100%; /* Rộng 100% của container cha */
-        padding: 20px;
-    }
-
-    .form-input {
-        width: 100%; /* Rộng 100% */
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc; /* Đường viền */
-        border-radius: 5px; /* Góc bo tròn */
-    }
-
-    .form-label {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .radio-label {
-        margin-right: 10px;
-    }
-
-    .file-input {
-        margin-top: 10px;
-    }
-
-    .btn-save {
-        background-color: #fff; /* Màu nền nút Save */
-        color: #000; /* Màu chữ nút Save */
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-</style>
-
-
 </body>
 
 </html>
+
