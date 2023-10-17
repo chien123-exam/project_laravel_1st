@@ -21,6 +21,7 @@ class CourseFactory extends Factory
             'name' => $this->faker->sentence,
             'slug' => Str::slug($this->faker->unique()->sentence),
             'link' => $this->faker->url,
+            'avatar' => $this->faker->imageUrl(200,200),
             'price' => $this->faker->randomFloat(2, 10, 500),
             'old_price' => $this->faker->randomFloat(2, 10, 500),
             'created_by' => $this->faker->randomNumber(),

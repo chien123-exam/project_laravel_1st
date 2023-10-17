@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->string('avatar');
             $table->string('link');
             $table->decimal('price', $precision = 17, $scale = 2);
             $table->decimal('old_price', $precision = 17, $scale = 2);

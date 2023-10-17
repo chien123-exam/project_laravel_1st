@@ -142,7 +142,14 @@
                         </div>
                         <a class="dropdown-item" href="general.html">My Profile</a>
                         <a class="dropdown-item" href="general.html">Account Settings</a>
-                        <a class="dropdown-item" href="login.html">Logout</a>
+                        <a class="dropdown-item" href="{{ route('users.change-password') }}">Password</a>
+                        <!-- <a class="dropdown-item" href="login.html">Logout</a> -->
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                {{ __('Log Out') }}
+                            </button>
+                        </form>
                     </div>
                 </li>
 
@@ -156,10 +163,10 @@
                 <div id="sidebar-menu" class="sidebar-menu">
                     <ul>
                         <li>
-                            <a href="index.html"><i class="fe fe-home"></i> <span>Dashboard</span></a>
+                            <a href="{{ route('admin.dashboard') }}"><i class="fe fe-home"></i> <span>Dashboard</span></a>
                         </li>
 
-                        <li>
+                        <li class=>
                             <a href="{{ route('user.index') }}"><i class="fe fe-layout"></i> <span>User Management</span></a>
                         </li>
 
@@ -173,7 +180,7 @@
                             <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Đơn đặt hàng</span></a>
                         </li>
                         <li class="active">
-                            <a href="blank-page.html"><i class="fe fe-layout"></i> <span>Quản lý khách hàng</span></a>
+                            <a href="{{ route('course.index') }}"><i class="fe fe-layout"></i> <span>Quản lý khách hàng</span></a>
                         </li>
                         <li class="submenu">
                             <a href="#"><i class="fe fe-users"></i> <span> Tài khoản </span> <span
@@ -197,202 +204,153 @@
                 </div>
             </div>
         </div>
-
         <div class="page-wrapper">
-            <div class="content container-fluid">
-                <div class="row">
-                    <div class="">
-                        <div>
-                            <a href="{{ route('course.index') }}">Back</a>
+                    @if(Session::has('success'))
+                        <div class="alert alert-success">
+                            {{ Session::get('success') }}
                         </div>
+                    @endif
+                    <div class="card">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">Tên khóa học</th>
+                                <th scope="col">Số lượng</th>
+                                <th scope="col">Giá tiền</th>
+                                <th scope="col">Hành động</th>
+                                </tr>
+                            </thead>
 
-                        <div class="card">
-                        <form method="post" action="{{ isset($course) ? route('course.update', ['course' => $course->id]) : route('course.store')}}" class="mt-6 space-y-6" enctype="multipart/form-data">
-                        @csrf
-
-                        @if(!empty($course))
-                            @method('put')
-                        @endif
-
-                        <div>
-                            <x-input-label for="name" :value="__('Name')" />
-                            <x-text-input id="name" name="name" type="text" class="form-input" :value="old('name', $course->name ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                            <tbody>
+                            @php
+                            $total = 0;
+                            @endphp
+                            @foreach ($coursesInCart as $course)
+                                @php
+                                    $total += $course->price * Session::get('cart')[$course->id]['quantity'];
+                                @endphp
+                            <tr>
+                                <td>{{ $course->name }}</td>
+                                <td>{{ Session::has('cart') && is_array(Session::get('cart')) && isset(Session::get('cart')[$course->id]['quantity']) ? Session::get('cart')[$course->id]['quantity'] : 0 }}</td>
+                                <td>${{ $course->price }}</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <form action="{{ route('cart.destroy', ['id' => $course->id]) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Xóa</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                        <tr>
+                            <td colspan="3" style="text-align: right;">Tổng tiền:</td>
+                            <td colspan="2">{{ number_format($total, 0, ',', '.') }} VNĐ</td>
+                        </tr>
+                            </tbody>
+                        </table>
+                        <br>
+                        <br />
+                            <div>
                         </div>
-
-                        <div>
-                            <x-input-label for="slug" :value="__('Slug')" />
-                            <x-text-input id="slug" name="slug" type="text" class="form-input" :value="old('slug', $course->slug ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('slug')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="link" :value="__('Link')" />
-                            <x-text-input id="link" name="link" type="text" class="form-input" :value="old('link', $course->link ?? null)" />
-                            <!-- <input type="file" name="link"> -->
-                            <x-input-error class="mt-2" :messages="$errors->get('link')" />
-
-                        </div>
-
-                        <div>
-                            <x-input-label for="price" :value="__('Price')" />
-                            <x-text-input id="price" name="price" type="text" class="form-input" :value="old('price', $course->price ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('price')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="old_price" :value="__('Old Price')" />
-                            <x-text-input id="old_price" name="old_price" type="text" class="form-input" :value="old('old_price', $course->old_price ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('old_price')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="created_by" :value="__('Created By')" />
-                            <x-text-input id="created_by" name="created_by" type="text" class="form-input" :value="old('created_by', $course->created_by ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('created_by')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="category_id" :value="__('Category ID')" />
-                            <x-text-input id="category_id" name="category_id" type="text" class="form-input" :value="old('category_id', $course->category_id ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('category_id')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="lessons" :value="__('Lessons')" />
-                            <x-text-input id="lessons" name="lessons" type="text" class="form-input" :value="old('lessons', $course->lessons ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('lessons')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="sections" :value="__('Sections')" />
-                            <x-text-input id="sections" name="sections" type="text" class="form-input" :value="old('sections', $course->sections ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('sections')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="view_count" :value="__('View count')" />
-                            <x-text-input id="view_count" name="view_count" type="text" class="form-input" :value="old('view_count', $course->view_count ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('view_count')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="benefits" :value="__('Benefits')" />
-                            <x-text-input id="benefits" name="benefits" type="text" class="form-input" :value="old('benefits', $course->benefits ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('benefits')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="fqa" :value="__('FQA')" />
-                            <x-text-input id="fqa" name="fqa" type="text" class="form-input" :value="old('fqa', $course->fqa ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('fqa')" />
-                        </div>
-
-
-                        <div>
-                            <x-input-label for="is_feature" :value="__('Is feature')" />
-                            <x-text-input id="is_feature" name="is_feature" type="text" class="form-input" :value="old('is_feature', $course->is_feature ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('is_feature')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="is_online" :value="__('Is online')" />
-                            <x-text-input id="is_online" name="is_online" type="text" class="form-input" :value="old('is_online', $course->is_online ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('is_online')" />
-                        </div>
-
-                         <div>
-                            <x-input-label for="description" :value="__('Description')" />
-                            <x-text-input id="description" name="description" type="text" class="form-input" :value="old('description', $course->description ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('description')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="content" :value="__('Content')" />
-                            <x-text-input id="content" name="content" type="text" class="form-input" :value="old('content', $course->content ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('content')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="meta_title" :value="__('Meta title')" />
-                            <x-text-input id="meta_title" name="meta_title" type="text" class="form-input" :value="old('meta_title', $course->meta_title ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('meta_title')" />
-                        </div>
-
-                        <div>
-                            <x-input-label for="meta_desc" :value="__('Meta desc')" />
-                            <x-text-input id="meta_desc" name="meta_desc" type="text" class="form-input" :value="old('meta_desc', $course->meta_desc ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('meta_desc')" />
-                        </div>
-
-
-                        <div>
-                            <x-input-label for="meta_keyword" :value="__('Meta keyword')" />
-                            <x-text-input id="meta_keyword" name="meta_keyword" type="text" class="form-input" :value="old('meta_keyword', $course->meta_keyword ?? null)" />
-                            <x-input-error class="mt-2" :messages="$errors->get('meta_keyword')" />
-                        </div>
-
-
-                        <div class="flex items-center gap-4">
-                            <x-primary-button>{{ __('Save') }}</x-primary-button>
-                        </div>
-
-                    </form>
+                        <div class="mt-4" style="display:flex; justify-content:space-between">
+                            <a href="{{ route('homepage.index') }}"  class="btn btn-primary back-button">Back</a>
+                            <button id="show-payment-modal" class="btn btn-primary">Thanh toán</button>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
-
     </div>
 
+    <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông tin thanh toán</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form thanh toán -->
+                    <form method="post" action="{{ route('cart.checkout') }}">
+                        @csrf
+                        <div class="form-group">
+                            <label for="shipping_name">Tên người nhận hàng:</label>
+                            <input type="text" name="shipping_name" id="shipping_name" class="form-control" required>
+                        </div>
 
+                        <!-- Trường nhập địa chỉ giao hàng -->
+                        <div class="form-group">
+                            <label for="shipping_address">Địa chỉ giao hàng:</label>
+                            <input type="text" name="shipping_address" id="shipping_address" class="form-control" required>
+                        </div>
 
+                        <!-- Trường nhập địa chỉ email -->
+                        <div class="form-group">
+                            <label for="email">Địa chỉ Email:</label>
+                            <input type="email" name="customer_email" id="email" class="form-control" required>
+                        </div>
+
+                        <!-- Trường nhập số điện thoại -->
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại:</label>
+                            <input type="text" name="customer_phone" id="phone" class="form-control" required>
+                        </div>
+
+                        <!-- Trường chọn phương thức thanh toán -->
+                        <div class="form-group">
+                            <label for="payment_method">Phương thức thanh toán:</label>
+                            <select name="payment_method" id="payment_method" class="form-control" required>
+                                <option value="credit_card">Thẻ tín dụng</option>
+                                <option value="bidv">BIDV</option>
+                                <option value="vietcombank">Vietcombank</option>
+                                <option value="vpbank">VPBank</option>
+                            </select>
+                        </div>
+
+                        <!-- Trường chọn phương thức giao hàng -->
+                        <div class="form-group">
+                            <label for="shipping_method">Phương thức giao hàng:</label>
+                            <select name="shipping_method" id="shipping_method" class="form-control" required>
+                                <option value="standard">Giao hàng tiêu chuẩn</option>
+                                <option value="cod">Nhận hàng thanh toán</option>
+                                <option value="express">Giao hàng nhanh</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Thanh toán</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .btn-primary.back-button {
+            margin-right: 10px;
+        }
+    </style>
     <script src="{{ asset('/template/js/jquery-3.6.0.min.js') }}"></script>
-
     <script src="{{ asset('/template/js/bootstrap.bundle.min.js') }}"></script>
-
     <script src="{{ asset('/template/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
     <script src="{{ asset('/template/js/script.js') }}"></script>
 
-    <style>
-    /* CSS tùy chỉnh cho form và các thẻ input */
-    .card {
-        width: 100%; /* Rộng 100% của container cha */
-        padding: 20px;
-    }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"></script>
 
-    .form-input {
-        width: 100%; /* Rộng 100% */
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc; /* Đường viền */
-        border-radius: 5px; /* Góc bo tròn */
-    }
-
-    .form-label {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .radio-label {
-        margin-right: 10px;
-    }
-
-    .file-input {
-        margin-top: 10px;
-    }
-
-    .btn-save {
-        background-color: #fff; /* Màu nền nút Save */
-        color: #000; /* Màu chữ nút Save */
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-</style>
-
-
+    <script>
+        $(document).ready(function() {
+            // Bắt sự kiện khi người dùng nhấn vào nút "Thanh Toán"
+            $("#show-payment-modal").click(function() {
+                // Hiển thị modal
+                $("#paymentModal").modal("show");
+            });
+        });
+    </script>
 </body>
 
 </html>
+

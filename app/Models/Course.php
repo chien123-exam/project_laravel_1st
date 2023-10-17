@@ -12,6 +12,7 @@ class Course extends Model
     protected $fillable = [
         'name',
         'slug',
+        'avatar',
         'link',
         'price',
         'old_price',
@@ -57,5 +58,11 @@ class Course extends Model
     {
         return $this->hasMany(Lesson::class);
     }
+
+    public function orders()
+    {
+        return $this->belongsToMany(Order::class);
+    }
+
 
 }
